@@ -1,6 +1,7 @@
 import random
 import time
 
+
 from numpy import linspace, searchsorted
 from scipy.stats import norm
 

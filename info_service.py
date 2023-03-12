@@ -4,10 +4,11 @@ import redis
 class InfoService:
 
     def __init__(self):
-        self.users = redis.Redis('localhost', port=6379, db=0, decode_responses=True)
+        self.users = redis.Redis('localhost', port=8003, db=0, decode_responses=True)
 
     def add_user(self, username, name):
         print('User received:\n\tUsername: ' + username + '\n\tName: ' + name)
+        self.users.set(username, name)
         return 'Done'
 
     def get_users(self):
@@ -20,8 +21,14 @@ class InfoService:
     def get_user(self, username):
         print(self.users.get(username))
 
-    def delete(self, username):
-        self.get_users.delete(username)
+    def delete_user(self, username):
+        print('User to delete: ' + username)
+        self.users.delete(username)
+        return 'Done'
+
+    def bondia(self):
+        print('vondia')
+        return "vondia"
 
 
 info_service = InfoService()
