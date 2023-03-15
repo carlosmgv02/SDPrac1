@@ -4,7 +4,7 @@ import redis
 class InfoService:
 
     def __init__(self):
-        self.users = redis.Redis('localhost', port=8003, db=0, decode_responses=True)
+        self.users = redis.Redis('162.246.254.134', port=8001, db=0, decode_responses=True, )
 
     def add_user(self, username, name):
         print('User received:\n\tUsername: ' + username + '\n\tName: ' + name)
@@ -19,7 +19,7 @@ class InfoService:
         return list(insults)
 
     def get_user(self, username):
-        print(self.users.get(username))
+        return self.users.get(username)
 
     def delete_user(self, username):
         print('User to delete: ' + username)
