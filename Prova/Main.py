@@ -2,9 +2,9 @@ import threading
 from Node import Node
 
 # Crear los nodos/servidores
-node1 = Node('Node 1', 'localhost', 8001)
-node2 = Node('Node 2', 'localhost', 8002)
-node3 = Node('Node 3', 'localhost', 8003)
+node1 = Node('Node 1', '162.246.254.134', 8001)
+node2 = Node('Node 2', '162.246.254.134', 8002)
+node3 = Node('Node 3', '162.246.254.134', 8003)
 
 # Añadir los nodos/servidores como peers
 node1.add_peer(node2)

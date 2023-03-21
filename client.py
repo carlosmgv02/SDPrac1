@@ -15,3 +15,5 @@ print('EL PROGRAMA FUNCIONA: ')
 print(proxy.get_user('pruebaObjeto'))
 prueba = base64.b64decode(proxy.get_user('pruebaObjeto')).decode('utf-8')
 print(jsonpickle.decode(prueba))
+
+proxy.subscribe('cola')

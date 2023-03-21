@@ -30,5 +30,20 @@ class InfoService:
         print('vondia')
         return "vondia"
 
+    def publish(self, topic, message):
+        print('Publishing message: ' + message + ' to topic: ' + topic)
+        self.users.publish(topic, message)
+        return 'Done'
+
+    def subscribe(self, topic):
+        print('Subscribing to topic: ' + topic)
+        pubsub = self.users.pubsub()
+        pubsub.subscribe(topic)
+        while True:
+            message = pubsub.get_message()
+            print(message)
+        if message:
+            print('Received message: ' + str(message['data']))
+
 
 info_service = InfoService()
