@@ -1,18 +1,19 @@
-import redis
-from xmlrpc.server import SimpleXMLRPCServer
-import logging
-from info_service import info_service
-from concurrent import futures
-logging.basicConfig(level=logging.INFO)
-print('*******BENVINGUT AL PROGRAMA*******')
-server = SimpleXMLRPCServer(("localhost", 4000))
+from client import meteo_data, pollution_data
+from meteo_utils import MeteoDataProcessor
+from meteoData import MeteoData
+from pollutionData import PollutionData
 
-logging.basicConfig(level=logging.INFO)
-server.register_instance(info_service)
 
-# server.register_function(info_service)
+processor = MeteoDataProcessor()
+meteo_data = MeteoData(meteo_data["temperature"], meteo_data["humidity"])
+wellness_data = processor.process_meteo_data(meteo_data)
+pollution_data = PollutionData(pollution_data["co2"])
+pollution_data_processed = processor.process_pollution_data(pollution_data)
+# process_meteo_data expects RawMeteoData: an object
+# with the attributes temperature and humidity
+# process_pollution_data expects RawPollutionData: an object
+# with the attribute co2
 
-try:
-    server.serve_forever()
-except KeyboardInterrupt:
-    print('Exiting')
+# sensors>load_balancer>servidors que fan calcul>redis
+# meteo_data = sensor.analyze_air()
+

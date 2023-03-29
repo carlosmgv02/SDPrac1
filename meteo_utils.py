@@ -1,7 +1,6 @@
 import random
 import time
 
-
 from numpy import linspace, searchsorted
 from scipy.stats import norm
 
@@ -17,7 +16,6 @@ MAX_HUMIDITY = 70
 OPTIMAL_TEMPERATURE = 20
 OPTIMAL_CO2 = 400
 OPTIMAL_HUMIDITY = 40
-
 
 MIN_PROCESS_TIME = 0.5
 MAX_PROCESS_TIME = 3.5
@@ -99,7 +97,11 @@ class MeteoDataDetector:
         Returns random air condition parameter values within the detector's ranges.
         :return: { "co2" : c (float) }
         """
-        return { "co2": self.gen_co2() }
+        return {"co2": self.gen_co2()}
+
+
+def _simulate_execution_time():
+    time.sleep(random.uniform(MIN_PROCESS_TIME, MAX_PROCESS_TIME))
 
 
 class MeteoDataProcessor:
@@ -147,7 +149,6 @@ class MeteoDataProcessor:
         their respective values within the accepted ranges.
         """
 
-
         # Get the wellness value of each parameter based on the processor's distributions.
         temperature_wellness = _value_from_distribution(self.temperature_space, self.temperature_vals,
                                                         meteo_data.temperature)
@@ -156,7 +157,7 @@ class MeteoDataProcessor:
         # Harmonic mean
         air_wellness = round(2 / (1 / temperature_wellness + 1 / humidity_wellness), 2)
 
-        self._simulate_execution_time()
+        _simulate_execution_time()
 
         return air_wellness
 
@@ -164,20 +165,20 @@ class MeteoDataProcessor:
         """
         Processes a co2 quantification to return an air pollution value.
         :param meteo_data: a class with the attribute "co2" and its respective value within the accepted ranges.
+
+        Parameters
+        ----------
+        pollution_data
+        pollution_data
         """
 
         co2_wellness = _value_from_distribution(self.co2_space, self.co2_vals, pollution_data.co2)
 
         co2_wellness = round(co2_wellness, 2)
 
-        self._simulate_execution_time()
+        _simulate_execution_time()
 
         return co2_wellness
-
-
-    def _simulate_execution_time(self):
-        time.sleep(random.uniform(MIN_PROCESS_TIME, MAX_PROCESS_TIME))
-
 
 
 def _gen_distribution(min_val, max_val, opt_val):
