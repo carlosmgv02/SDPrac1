@@ -20,7 +20,7 @@ while True:
     proxy = proxies[indice_terminal]
 
     # Enviar la información a la terminal
-    proxy.enviar_informacion('informacion')
+    proxy.send_info('informacion')
 
     # Esperar un tiempo antes de la siguiente iteración
     time.sleep(1)
