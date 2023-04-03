@@ -1,31 +1,40 @@
-import meteo_utils
-
 import grpc
-
-# import the generated classes
-#import insultingServer_pb2
-#import insultingServer_pb2_grpc
+import meteo_utils_pb2
+import meteo_utils_pb2_grpc
 
 # open a gRPC channel
 channel = grpc.insecure_channel('localhost:50051')
 
 # create a stub (client)
-stub = insultingServer_pb2_grpc.InsultingServiceStub(channel)
+stub = meteo_utils_pb2_grpc.MeteoDataServiceStub(channel)
 
+# create a valid request message
+meteo_data = meteo_utils_pb2.MeteoData(temperature=25.5, humidity=50.0)
+response = stub.ProcessMeteoData(meteo_data)
 
+# print the response
+print(response.wellness_data.temperature)
+print(response.wellness_data.humidity)
 
+# create a valid request message
+pollution_data = meteo_utils_pb2.PollutionData(co2=1000)
+response = stub.ProcessPollutionData(pollution_data)
 
-conn = xmlrpc.client.ServerProxy('http://localhost:9000')
-detector = meteo_utils.MeteoDataDetector()
+# print the response
+print(response.pollution_data_processed.co2)
 
-# Air sensors
-meteo_data = detector.analyze_air()
-conn.send_info(meteo_data)
-# returns a dictionary; { “temperature”: x, “humidity”: y }
-# Pollution sensors
-pollution_data = detector.analyze_pollution()
-# returns a dictionary; { “co2”: z }
-print(meteo_data)
-print(pollution_data)
+# create a valid request message
+air_data = meteo_utils_pb2.AirData(temperature=25.5, humidity=50.0, co2=1000)
+response = stub.AnalyzeAir(air_data)
 
-proxy = xmlrpc.client.ServerProxy('http://localhost:4000/')
+# print the response
+print(response.wellness_data.temperature)
+print(response.wellness_data.humidity)
+print(response.pollution_data_processed.co2)
+
+# create a valid request message
+pollution_data = meteo_utils_pb2.PollutionData(co2=1000)
+response = stub.AnalyzePollution(pollution_data)
+
+# print the response
+print(response.pollution_data_processed.co2)

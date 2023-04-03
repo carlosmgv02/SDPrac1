@@ -2,7 +2,7 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 
 // to compile
-// python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./meteo_utils.proto
+//python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./meteo_utils.proto
 
 package meteo;
 
@@ -24,20 +24,16 @@ message AirWellness {
   float wellness = 1;
 }
 
-service MeteoDataService {
-  rpc GetAirConditionParams() returns (AirConditionParams) {}
-  rpc CalculateAirWellness(AirConditionParams) returns (AirWellness) {}
-  rpc CalculateAirWellness(AirConditionParams) returns (AirWellness) {}
-  rpc CalculateAirWellness(AirConditionParams) returns (AirWellness) {}
-  rpc CalculateAirWellness(AirConditionParams) returns (AirWellness) {}
-
-  rpc ProcessMeteoData(MeteoData) returns (AirWellness) {}
-  rpc ProcessPollutionData(PollutionData) returns (Co2Wellness) {}
-
-  rpc AnalyzeAir() returns (AirAnalysisResponse) {}
-  rpc AnalyzePollution() returns (PollutionAnalysisResponse) {}
-
-
-
-analyze_air
+message Co2Wellness {
+  float wellness = 1;
 }
+
+
+service MeteoDataService {
+
+  rpc ProcessMeteoData(AirAnalysisResponse) returns (AirWellness) {}
+  rpc ProcessPollutionData(PollutionAnalysisResponse) returns (Co2Wellness) {}
+  rpc AnalyzeAir(google.protobuf.Empty) returns (AirAnalysisResponse) {}
+  rpc AnalyzePollution (google.protobuf.Empty) returns (PollutionAnalysisResponse) {}
+}
+
