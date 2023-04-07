@@ -30,7 +30,6 @@ message Co2Wellness {
 
 
 service MeteoDataService {
-
   rpc ProcessMeteoData(AirAnalysisResponse) returns (AirWellness) {}
   rpc ProcessPollutionData(PollutionAnalysisResponse) returns (Co2Wellness) {}
   rpc AnalyzeAir(google.protobuf.Empty) returns (AirAnalysisResponse) {}
