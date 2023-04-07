@@ -2,6 +2,11 @@ import grpc
 from concurrent import futures
 import time
 
+import meteo_utils
+from meteo_utils import MeteoDataProcessor
+from meteoData import MeteoData
+from pollutionData import PollutionData
+
 import meteo_utils_pb2
 import meteo_utils_pb2_grpc
 
@@ -36,19 +41,27 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
     def AnalyzeAir(self, request, context):
         # Here you can write your implementation to analyze the air quality
         # For example, let's say you want to return some dummy data
-        response = meteo_utils_pb2.AirAnalysisResponse(temperature=25.0, humidity=50.0)
+        detector = meteo_utils.MeteoDataDetector()
+        meteo_data = detector.analyze_air()
+        print(meteo_data)
+        #temperature=20.0, humidity=3.0
+        response = meteo_utils_pb2.AirAnalysisResponse(meteo_data)
         return response
 
     def AnalyzePollution(self, request, context):
         # Here you can write your implementation to analyze the pollution level
         # For example, let's say you want to return some dummy data
-        response = meteo_utils_pb2.PollutionAnalysisResponse(co2=500.0)
+        detector = meteo_utils.MeteoDataDetector()
+        meteo_data = detector.analyze_pollution()
+        response = meteo_utils_pb2.PollutionAnalysisResponse(co2=334400.0)
         return response
 
 
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 meteo_utils_pb2_grpc.add_MeteoDataServiceServicer_to_server(MeteoDataServiceServicer(), server)
-server.add_insecure_port('[::]:50051')
+print('Starting server. Listening on port 50051.')
+
+server.add_insecure_port('[::]:5001')
 server.start()
 
 try:
@@ -57,15 +70,3 @@ try:
 except KeyboardInterrupt:
     server.stop(0)
 
-#processor = MeteoDataProcessor()
-#meteo_data = MeteoData(meteo_data["temperature"], meteo_data["humidity"])
-#wellness_data = processor.process_meteo_data(meteo_data)
-#pollution_data = PollutionData(pollution_data["co2"])
-#pollution_data_processed = processor.process_pollution_data(pollution_data)
-# process_meteo_data expects RawMeteoData: an object
-# with the attributes temperature and humidity
-# process_pollution_data expects RawPollutionData: an object
-# with the attribute co2
-
-# sensors>load_balancer>servidors que fan calcul>redis
-# meteo_data = sensor.analyze_air()

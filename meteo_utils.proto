@@ -34,6 +34,6 @@ service MeteoDataService {
   rpc ProcessMeteoData(AirAnalysisResponse) returns (AirWellness) {}
   rpc ProcessPollutionData(PollutionAnalysisResponse) returns (Co2Wellness) {}
   rpc AnalyzeAir(google.protobuf.Empty) returns (AirAnalysisResponse) {}
-  rpc AnalyzePollution (google.protobuf.Empty) returns (PollutionAnalysisResponse) {}
+  rpc AnalyzePollution(google.protobuf.Empty) returns (PollutionAnalysisResponse) {}
 }
 
