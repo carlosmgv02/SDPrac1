@@ -5,7 +5,9 @@ import grpc
 import time
 
 import meteo_utils
-from gRPC.PROTO import load_balancer_pb2_grpc, meteo_utils_pb2
+from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
+from gRPC.PROTO import load_balancer_pb2_grpc
+
 from loadBalancer import RRLB
 
 
@@ -23,15 +25,20 @@ class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
 
     def ReceiveMeteo(self, request, context):
         channel = RRLB.receive_meteo_channel()
-        print(channel)
-        # stub = load_balancer_pb2_grpc.LoadBalancerServicerStub(channel)
+        print(str(request) + 'will be processed in ' + channel)
+        channel_stub = grpc.insecure_channel(channel)
+        RRLB.set_server(channel)
+        server_processor_meteo = meteo_utils_pb2_grpc.MeteoDataServiceStub(channel_stub)
+        response_processor_meteo = server_processor_meteo.ProcessMeteoData(request)
         response = load_balancer_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
     def ReceivePollution(self, request, context):
         channel = RRLB.receive_pollution_channel()
-        print(channel)
-        # stub = load_balancer_pb2_grpc.LoadBalancerServicerStub(channel)
+
+        print(str(request.time) + 'will be processed in ' + channel)
+        # server_processor_pollution = meteo_utils_pb2_grpc.MeteoDataServiceStub(channel)
+        # response_processor_meteo = server_processor_pollution.ProcessPollutionData(request)
         response = load_balancer_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 

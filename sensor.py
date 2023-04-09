@@ -18,6 +18,7 @@ empty = load_balancer_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
 meteoReq = stub.AnalyzeAir(empty)
 meteoReq.time = float(datetime.datetime.now().timestamp())
 stub.ReceiveMeteo(meteoReq)
+print('meteoReq: ')
 print(meteoReq)
 
 # create a valid request message
@@ -27,6 +28,7 @@ pollutionReq = stub.AnalyzePollution(empty)
 pollutionReq.time = float(datetime.datetime.now().timestamp())
 stub.ReceivePollution(pollutionReq)
 # print the response
+print('pollutionReq: ')
 print(pollutionReq)
 
 
