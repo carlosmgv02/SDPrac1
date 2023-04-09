@@ -24,13 +24,14 @@ class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
         return stub.sendMeteoPollutionData(request)
 
     def ReceiveMeteo(self, request, context):
-        channel = RRLB.receive_meteo_channel()
+        channel = '[::]:5001'
         print(str(request) + 'will be processed in ' + channel)
-        channel_stub = grpc.insecure_channel(channel)
-        RRLB.set_server(channel)
+        channel_stub = grpc.insecure_channel('localhost:5001')
+        #RRLB.set_server(channel)
         server_processor_meteo = meteo_utils_pb2_grpc.MeteoDataServiceStub(channel_stub)
-        #print('this is the response' +`)
-        #response_processor_meteo = server_processor_meteo.ProcessMeteoData(request)
+        print('this is the response')
+        res = server_processor_meteo.ProcessMeteoData(request)
+        print(res)
         response = load_balancer_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
@@ -66,7 +67,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     load_balancer_pb2_grpc.add_LoadBalancerServicerServicer_to_server(
         LoadBalancerServicer(), server)
-    server.add_insecure_port("[::]:50050")
+    server.add_insecure_port('0.0.0.0:5000')
     server.start()
     try:
         while True:

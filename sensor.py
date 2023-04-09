@@ -7,7 +7,7 @@ import sys
 
 
 # open a gRPC channel
-channel = grpc.insecure_channel('localhost:'+'50050')
+channel = grpc.insecure_channel('localhost:5000')
 print('running on 50050' )
 
 # create a stub (client)

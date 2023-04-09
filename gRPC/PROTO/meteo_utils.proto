@@ -2,7 +2,7 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 
 // to compile
-//python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./meteo_utils.proto
+//python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./gRPC/PROTO/meteo_utils.proto
 
 package meteo;
 
@@ -15,7 +15,8 @@ message AirConditionParams {
 message AirAnalysisResponse {
     float temperature = 1;
     float humidity = 2;
-    float time = 3;
+    float co2 = 3;
+    float time = 4;
 }
 message PollutionAnalysisResponse {
     float co2 = 1;

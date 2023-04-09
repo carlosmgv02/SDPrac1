@@ -33,7 +33,7 @@ meteo_utils_pb2_grpc.add_MeteoDataServiceServicer_to_server(MeteoDataServiceServ
 #port = RRLB.get_server()
 
 print('Starting server. Listening on port. polls')
-server.add_insecure_port('[::]:5001')
+server.add_insecure_port('0.0.0.0:5001')
 
 server.start()
 # print(load_balancer.get_next_address())
