@@ -29,7 +29,8 @@ class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
         channel_stub = grpc.insecure_channel(channel)
         RRLB.set_server(channel)
         server_processor_meteo = meteo_utils_pb2_grpc.MeteoDataServiceStub(channel_stub)
-        response_processor_meteo = server_processor_meteo.ProcessMeteoData(request)
+        #print('this is the response' +`)
+        #response_processor_meteo = server_processor_meteo.ProcessMeteoData(request)
         response = load_balancer_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
