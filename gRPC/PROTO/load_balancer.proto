@@ -8,9 +8,12 @@ import "google/protobuf/empty.proto";
 message AirAnalysisResponse {
     float temperature = 1;
     float humidity = 2;
+    float time = 3;
 }
+
 message PollutionAnalysisResponse {
     float co2 = 1;
+    float time = 3;
 }
 
 message AirWellness {
@@ -23,11 +26,14 @@ message Co2Wellness {
 
 
 service LoadBalancerServicer {
-  rpc sendMeteoData(AirAnalysisResponse) returns (AirWellness) {}
-  rpc sendMeteoPollutionData(PollutionAnalysisResponse) returns (Co2Wellness) {}
-  rpc receiveMeteo(google.protobuf.Empty) returns (AirWellness) {}
-  rpc receivePollution(google.protobuf.Empty) returns (Co2Wellness) {}
   rpc AnalyzeAir(google.protobuf.Empty) returns (AirAnalysisResponse) {}
   rpc AnalyzePollution(google.protobuf.Empty) returns (PollutionAnalysisResponse) {}
+
+  rpc ReceiveMeteo(AirAnalysisResponse) returns (google.protobuf.Empty) {}
+  rpc ReceivePollution(PollutionAnalysisResponse) returns (google.protobuf.Empty) {}
+
+  rpc SendMeteoData(AirAnalysisResponse) returns (AirWellness) {}
+  rpc SendMeteoPollutionData(PollutionAnalysisResponse) returns (Co2Wellness) {}
+
 }
 

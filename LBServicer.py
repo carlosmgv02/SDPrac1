@@ -1,38 +1,41 @@
 from concurrent import futures
+import datetime
 
 import grpc
 import time
 
 import meteo_utils
 from gRPC.PROTO import load_balancer_pb2_grpc, meteo_utils_pb2
+from loadBalancer import RRLB
 
 
-class RoundRobinLoadBalancer(load_balancer_pb2_grpc.LoadBalancerServicer):
-    def __init__(self, addresses):
-        self.addresses = addresses
-        self.current_index = 0
+class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
 
-    def get_next_address(self):
-        address = self.addresses[self.current_index]
-        self.current_index = (self.current_index + 1) % len(self.addresses)
-        return address
-
-    def sendMeteoData(self, request, context):
-        channel = grpc.insecure_channel(self.get_next_address())
+    def SendMeteoData(self, request, context):
+        channel = grpc.insecure_channel(RRLB.get_next_address())
         stub = load_balancer_pb2_grpc.MeteoDataServiceStub(channel)
         return stub.sendMeteoData(request)
 
-    def sendMeteoPollutionData(self, request, context):
-        channel = grpc.insecure_channel(self.get_next_address())
+    def SendMeteoPollutionData(self, request, context):
+        channel = grpc.insecure_channel(RRLB.get_next_address())
         stub = load_balancer_pb2_grpc.MeteoDataServiceStub(channel)
         return stub.sendMeteoPollutionData(request)
 
-    def receiveMeteo(self, request, context):
-        channel = grpc.insecure_channel(self.get_next_address())
-        stub = load_balancer_pb2_grpc.MeteoDataServiceStub(channel)
-        return stub.receiveMeteo(request)
+    def ReceiveMeteo(self, request, context):
+        channel = RRLB.receive_meteo_channel()
+        print(channel)
+        # stub = load_balancer_pb2_grpc.LoadBalancerServicerStub(channel)
+        response = load_balancer_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
+        return response
 
-    def AnalyzeAir(self, request, context):
+    def ReceivePollution(self, request, context):
+        channel = RRLB.receive_pollution_channel()
+        print(channel)
+        # stub = load_balancer_pb2_grpc.LoadBalancerServicerStub(channel)
+        response = load_balancer_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
+        return response
+
+    def AnalyzeAir(self, empty, context):
         # Here you can write your implementation to analyze the air quality
         # For example, let's say you want to return some dummy data
         detector = meteo_utils.MeteoDataDetector()
@@ -42,7 +45,7 @@ class RoundRobinLoadBalancer(load_balancer_pb2_grpc.LoadBalancerServicer):
                                                        humidity=meteo_data["temperature"])
         return response
 
-    def AnalyzePollution(self, request, context):
+    def AnalyzePollution(self, empty, context):
         # Here you can write your implementation to analyze the pollution level
         # For example, let's say you want to return some dummy data
         detector = meteo_utils.MeteoDataDetector()
@@ -54,7 +57,7 @@ class RoundRobinLoadBalancer(load_balancer_pb2_grpc.LoadBalancerServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     load_balancer_pb2_grpc.add_LoadBalancerServicerServicer_to_server(
-        RoundRobinLoadBalancer(["localhost:50050"]), server)
+        LoadBalancerServicer(), server)
     server.add_insecure_port("[::]:50050")
     server.start()
     try:

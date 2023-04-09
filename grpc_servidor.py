@@ -4,7 +4,7 @@ import time
 
 import meteo_utils
 
-from gRPC.PROTO import meteo_utils_pb2
+import meteo_utils_pb2
 from gRPC.PROTO import meteo_utils_pb2_grpc
 
 
