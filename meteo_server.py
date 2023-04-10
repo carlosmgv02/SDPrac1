@@ -3,7 +3,8 @@ from concurrent import futures
 import time
 import redis
 import meteo_utils
-from meteoData import MeteoData
+from dataInstance import MeteoData
+from dataInstance import PollutionData
 from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
 from loadBalancer import RRLB
 import json
@@ -29,23 +30,10 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         print("the req" + str(request))
         meteo_data = MeteoData(request.temperature, request.humidity, request.time)
         serialized_meteo_data = meteo_data.__dict__
-        print(self.redisClient.hmset(str(request.time), serialized_meteo_data))
-
-        res = self.redisClient.hgetall(str(request.time))
-
-        retrieved_meteo_data = MeteoData(float(res[b'temperature']), float(res[b'humidity']), float(res[b'timestamp']))
-        print('res: ' + str(retrieved_meteo_data))
-        all_data = self.get_all_meteo_data()
-        print('all values: ' + str(all_data))
         wellness = self.meteo_data_processor.process_meteo_data(request)
+        print(self.redisClient.set(str(request.time), wellness))
 
-        # Perform some calculations to calculate the wellness index
-        # wellness_index = (temperature + humidity) / (2 * co2)
-
-        # Create and return the response object
-        # response = meteo_utils_pb2.AirWellness(wellness=wellness_index)
-        # self.redisClient.set("meteo_data", response)
-        response = meteo_utils_pb2.AirWellness(wellness=wellness)
+        response = meteo_utils_pb2.Co2Wellness(wellness=wellness)
         return response
 
 

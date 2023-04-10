@@ -1,0 +1,39 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+// to compile
+//python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./gRPC/PROTO/load_balancer.proto
+
+
+
+message AirAnalysisResponse {
+  float temperature = 1;
+}
+
+message PollutionAnalysisResponse {
+  float co2 = 1;
+}
+
+message WellnessResults {
+  float wellnessCo2 = 1;
+  float wellnessMeteo = 2;
+  float avgCo2 = 3;
+  float avgMeteo = 4;
+  float desvCo2 = 5;
+  float desvMeteo = 6;
+  float regCo2 = 7;
+  float regMeteo = 8;
+}
+
+
+
+
+service LoadBalancerServicer {
+
+  rpc GetPollution(google.protobuf.Empty)  returns (AirAnalysisResponse) {}
+  rpc GetMeteo(google.protobuf.Empty)  returns (PollutionAnalysisResponse) {}
+
+  rpc SendWellnessResults(google.protobuf.Empty) returns (WellnessResults) {}
+
+}
+

@@ -1,6 +1,6 @@
 from client import meteo_data, pollution_data
 from meteo_utils import MeteoDataProcessor
-from meteoData import MeteoData
+from dataInstance import MeteoData
 from pollutionData import PollutionData
 
 

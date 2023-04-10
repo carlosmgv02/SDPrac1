@@ -19,7 +19,7 @@ message AirAnalysisResponse {
 }
 message PollutionAnalysisResponse {
     float co2 = 1;
-    float time = 3;
+    float time = 2;
 }
 
 message AirWellness {
