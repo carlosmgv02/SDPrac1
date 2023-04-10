@@ -25,7 +25,7 @@ class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
 
     def ReceiveMeteo(self, request, context):
         channel = RRLB.get_next_server()
-        channel_stub = grpc.insecure_channel('localhost:5001')
+        channel_stub = grpc.insecure_channel('localhost:5002')
         print(str(request) + 'will be processed in ' + channel)
         # RRLB.set_server(channel)
         server_processor_meteo = meteo_utils_pb2_grpc.MeteoDataServiceStub(channel_stub)

@@ -1,7 +1,7 @@
 class RoundRobinLoadBalancer:
     def __init__(self):
         self.current_server = None
-        self.servers = ['localhost:5051', 'localhost:5052', 'localhost:5053', 'localhost:5054']
+        self.servers = ['localhost:5052', 'localhost:5052', 'localhost:5053', 'localhost:5054']
         self.current_index = 0
 
     def add_server(self, server):

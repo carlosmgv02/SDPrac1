@@ -15,8 +15,7 @@ message AirConditionParams {
 message AirAnalysisResponse {
     float temperature = 1;
     float humidity = 2;
-    float co2 = 3;
-    float time = 4;
+    float time = 3;
 }
 message PollutionAnalysisResponse {
     float co2 = 1;
