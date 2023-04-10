@@ -15,6 +15,14 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         self.meteo_data_processor = meteo_utils.MeteoDataProcessor()
         self.redisClient = redis.Redis('162.246.254.134', port=8001)
 
+    def get_all_meteo_data(self):
+        all_data = {}
+        for key in self.redisClient.keys():
+            data = self.redisClient.hgetall(key)
+            meteo_data = MeteoData(float(data[b'temperature']), float(data[b'humidity']), float(data[b'timestamp']))
+            all_data[key] = meteo_data
+        return all_data
+
     def ProcessMeteoData(self, request, context):
         # Here you can write your implementation to process meteo data from the request
         # For example, let's say you want to calculate the air wellness index based on the given parameters
@@ -24,8 +32,11 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         print(self.redisClient.hmset(str(request.time), serialized_meteo_data))
 
         res = self.redisClient.hgetall(str(request.time))
+
         retrieved_meteo_data = MeteoData(float(res[b'temperature']), float(res[b'humidity']), float(res[b'timestamp']))
         print('res: ' + str(retrieved_meteo_data))
+        all_data = self.get_all_meteo_data()
+        print('all values: ' + str(all_data))
         wellness = self.meteo_data_processor.process_meteo_data(request)
 
         # Perform some calculations to calculate the wellness index
