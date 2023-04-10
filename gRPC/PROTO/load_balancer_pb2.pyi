@@ -34,3 +34,9 @@ class PollutionAnalysisResponse(_message.Message):
     co2: float
     time: float
     def __init__(self, co2: _Optional[float] = ..., time: _Optional[float] = ...) -> None: ...
+
+class Port(_message.Message):
+    __slots__ = ["port"]
+    PORT_FIELD_NUMBER: _ClassVar[int]
+    port: str
+    def __init__(self, port: _Optional[str] = ...) -> None: ...

@@ -33,7 +33,7 @@ class RoundRobinLoadBalancer:
         print('swetejat be xd' + str(self.current_server))
 
     def get_server(self):
-        return self.current_server
+        return self.get_next_server(self)
 
 
 RRLB = RoundRobinLoadBalancer()

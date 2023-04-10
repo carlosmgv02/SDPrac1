@@ -13,7 +13,7 @@ message AirAnalysisResponse {
 
 message PollutionAnalysisResponse {
     float co2 = 1;
-    float time = 3;
+    float time = 2;
 }
 
 message AirWellness {
@@ -24,6 +24,9 @@ message Co2Wellness {
   float wellness = 1;
 }
 
+message Port {
+  string port = 1;
+}
 
 service LoadBalancerServicer {
   rpc AnalyzeAir(google.protobuf.Empty) returns (AirAnalysisResponse) {}
@@ -31,6 +34,10 @@ service LoadBalancerServicer {
 
   rpc ReceiveMeteo(AirAnalysisResponse) returns (google.protobuf.Empty) {}
   rpc ReceivePollution(PollutionAnalysisResponse) returns (google.protobuf.Empty) {}
+
+  rpc GetChannel(google.protobuf.Empty)  returns (Port) {}
+  rpc AddChannel(Port)  returns (google.protobuf.Empty) {}
+  rpc DeleteChannel(Port)  returns (google.protobuf.Empty) {}
 
   rpc SendMeteoData(AirAnalysisResponse) returns (AirWellness) {}
   rpc SendMeteoPollutionData(PollutionAnalysisResponse) returns (Co2Wellness) {}

@@ -35,6 +35,21 @@ class LoadBalancerServicerStub(object):
                 request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
+        self.GetChannel = channel.unary_unary(
+                '/LoadBalancerServicer/GetChannel',
+                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                response_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
+                )
+        self.AddChannel = channel.unary_unary(
+                '/LoadBalancerServicer/AddChannel',
+                request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
+        self.DeleteChannel = channel.unary_unary(
+                '/LoadBalancerServicer/DeleteChannel',
+                request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
         self.SendMeteoData = channel.unary_unary(
                 '/LoadBalancerServicer/SendMeteoData',
                 request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.SerializeToString,
@@ -74,6 +89,24 @@ class LoadBalancerServicerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetChannel(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddChannel(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteChannel(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def SendMeteoData(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -107,6 +140,21 @@ def add_LoadBalancerServicerServicer_to_server(servicer, server):
             'ReceivePollution': grpc.unary_unary_rpc_method_handler(
                     servicer.ReceivePollution,
                     request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'GetChannel': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetChannel,
+                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                    response_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
+            ),
+            'AddChannel': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddChannel,
+                    request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'DeleteChannel': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteChannel,
+                    request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SendMeteoData': grpc.unary_unary_rpc_method_handler(
@@ -193,6 +241,57 @@ class LoadBalancerServicer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/ReceivePollution',
             gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetChannel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/GetChannel',
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddChannel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/AddChannel',
+            gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteChannel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/DeleteChannel',
+            gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

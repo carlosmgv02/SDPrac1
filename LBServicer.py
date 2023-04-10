@@ -5,7 +5,7 @@ import grpc
 import time
 
 import meteo_utils
-from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
+from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2, load_balancer_pb2
 from gRPC.PROTO import load_balancer_pb2_grpc
 
 from loadBalancer import RRLB
@@ -24,10 +24,10 @@ class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
         return stub.sendMeteoPollutionData(request)
 
     def ReceiveMeteo(self, request, context):
-        channel = '[::]:5001'
-        print(str(request) + 'will be processed in ' + channel)
+        channel = RRLB.get_next_server()
         channel_stub = grpc.insecure_channel('localhost:5001')
-        #RRLB.set_server(channel)
+        print(str(request) + 'will be processed in ' + channel)
+        # RRLB.set_server(channel)
         server_processor_meteo = meteo_utils_pb2_grpc.MeteoDataServiceStub(channel_stub)
         print('this is the response')
         res = server_processor_meteo.ProcessMeteoData(request)
@@ -60,6 +60,23 @@ class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
         detector = meteo_utils.MeteoDataDetector()
         meteo_data = detector.analyze_pollution()
         response = meteo_utils_pb2.PollutionAnalysisResponse(co2=meteo_data["co2"])
+        return response
+
+    def GetChannel(self, empty, context):
+        # Here you can write your implementation to analyze the pollution level
+        # For example, let's say you want to return some dummy data
+        channel = RRLB.get_next_server()
+        channel_stub = grpc.insecure_channel(channel)
+        response = load_balancer_pb2.Port()
+        return channel_stub
+
+    def AddChannel(self, request, context):
+        # Here you can write your implementation to analyze the pollution level
+        # For example, let's say you want to return some dummy data
+        RRLB.add_server(request)
+        detector = meteo_utils.MeteoDataDetector()
+        meteo_data = detector.analyze_pollution()
+        response = meteo_utils_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
 
 

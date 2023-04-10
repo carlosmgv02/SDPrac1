@@ -1,28 +1,35 @@
 import grpc
 from concurrent import futures
 import time
-
+import redis
 import meteo_utils
-
+from meteoData import MeteoData
 from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
 from loadBalancer import RRLB
 
 
 class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
+
+    def __init__(self):
+        self.meteo_data_processor = meteo_utils.MeteoDataProcessor()
+        self.redisClient = redis.Redis('162.246.254,134', port=8001)
+
     def ProcessMeteoData(self, request, context):
         # Here you can write your implementation to process meteo data from the request
         # For example, let's say you want to calculate the air wellness index based on the given parameters
-        temperature = request.temperature
-        co2 = request.co2
-        humidity = request.humidity
+        print("the req" + str(request))
+        meteo_data = MeteoData(request.temperature, request.humidity, request.time)
+        print('mtd' + str(meteo_data ))
+        wellness = self.meteo_data_processor.process_meteo_data(request)
 
         # Perform some calculations to calculate the wellness index
-        wellness_index = (temperature + humidity) / (2 * co2)
+        #wellness_index = (temperature + humidity) / (2 * co2)
 
         # Create and return the response object
-        response = meteo_utils_pb2.AirWellness(wellness=wellness_index)
+        #response = meteo_utils_pb2.AirWellness(wellness=wellness_index)
+        #self.redisClient.set("meteo_data", response)
+        response = meteo_utils_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         return response
-
 
 # Use a RoundRobinLoadBalancer instead of a list of addresses
 # load_balancer = RoundRobinLoadBalancer(["localhost:5001", "localhost:5002", "localhost:5003"])
@@ -30,9 +37,9 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 meteo_utils_pb2_grpc.add_MeteoDataServiceServicer_to_server(MeteoDataServiceServicer(), server)
 
-#port = RRLB.get_server()
+##port = RRLB.get_server()
 
-print('Starting server. Listening on port. polls')
+print('Starting server. Listening on port. polls' )
 server.add_insecure_port('0.0.0.0:5001')
 
 server.start()
