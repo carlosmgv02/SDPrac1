@@ -7,7 +7,7 @@ import redis
 import meteo_utils
 from dataInstance import PollutionData
 
-from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
+from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2, proxy_pb2_grpc
 
 
 class PollutionServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
@@ -26,6 +26,13 @@ class PollutionServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         print(self.redisClient.set(str(request.time), wellness))
 
         response = meteo_utils_pb2.Co2Wellness(wellness=wellness)
+
+        channel_proxy = grpc.insecure_channel('localhost:5004')
+        # RRLB.set_server(channel)
+        server_processor = proxy_pb2_grpc.ProxyServicerStub(channel_proxy)
+        print('this is the response sending to the proxy')
+        res = server_processor.GetPollution(request)
+
         return response
 
 
