@@ -27,9 +27,7 @@ channel = connection.channel()
 
 print('Sensor - running on 50050')
 while True:
-    messages =[]
-    messages.append(analyzeAir())
-    messages.append(analyzePollution())
+    messages = [analyzeAir(), analyzePollution()]
     for message in messages:
         channel.basic_publish(
             exchange='',

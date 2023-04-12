@@ -16,3 +16,13 @@ class PollutionData:
 
     def __str__(self):
         return "CO2: " + str(self.co2) + " Timestamp: " + str(self.timestamp)
+
+
+class DataCalculus:
+    def __init__(self, time, average, stdev):
+        self.time = time
+        self.average = average
+        self.stdev = stdev
+
+    def __str__(self):
+        return "Time: " + str(self.time) + " Average: " + str(self.average) + " Stdev: " + str(self.stdev)

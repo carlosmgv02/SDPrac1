@@ -23,12 +23,13 @@ class MeteoDataServiceServicer():
         self.redisClient = redis.Redis('162.246.254.134', port=8001)
         self.channel = pika.BlockingConnection(pika.ConnectionParameters('162.246.254.134')).channel()
 
-
     def process_meteo(self, data):
-        return self.meteo_data_processor.process_meteo_data(data)
+        meteo_data = MeteoData(data['temperature'], data['humidity'], data['timestamp'])
+        return self.meteo_data_processor.process_meteo_data(meteo_data)
 
     def process_pollution(self, data):
-        return self.meteo_data_processor.process_pollution_data(data)
+        pollution_data = PollutionData(data['co2'], data['timestamp'])
+        return self.meteo_data_processor.process_pollution_data(pollution_data)
 
     def saveData(self, data):
         data = json.loads(data)
@@ -38,7 +39,6 @@ class MeteoDataServiceServicer():
             res = self.process_meteo(data)
         timestamp = data['timestamp']
         return self.redisClient.set(f'm{str(timestamp)}', str(res).encode('utf-8'))
-
 
     def processData(self):
         def callback(ch, method, properties, body):
@@ -64,6 +64,7 @@ if __name__ == '__main__':
             server.processData()
             time.sleep(86400)
     except KeyboardInterrupt:
+
         print('Interrupted')
         try:
             sys.exit(0)
