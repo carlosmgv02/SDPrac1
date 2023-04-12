@@ -2,11 +2,11 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from gRPC.PROTO import proxy_pb2 as gRPC_dot_PROTO_dot_proxy__pb2
+from gRPC.PROTO import terminal_pb2 as gRPC_dot_PROTO_dot_terminal__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-class ProxyServicerStub(object):
+class TerminalServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -16,23 +16,23 @@ class ProxyServicerStub(object):
             channel: A grpc.Channel.
         """
         self.GetPollution = channel.unary_unary(
-                '/ProxyServicer/GetPollution',
-                request_serializer=gRPC_dot_PROTO_dot_proxy__pb2.PollutionAnalysisResponse.SerializeToString,
+                '/TerminalService/GetPollution',
+                request_serializer=gRPC_dot_PROTO_dot_terminal__pb2.PollutionAnalysisResponse.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.GetMeteo = channel.unary_unary(
-                '/ProxyServicer/GetMeteo',
-                request_serializer=gRPC_dot_PROTO_dot_proxy__pb2.AirAnalysisResponse.SerializeToString,
+                '/TerminalService/GetMeteo',
+                request_serializer=gRPC_dot_PROTO_dot_terminal__pb2.AirAnalysisResponse.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
         self.SendWellnessResults = channel.unary_unary(
-                '/ProxyServicer/SendWellnessResults',
+                '/TerminalService/SendWellnessResults',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=gRPC_dot_PROTO_dot_proxy__pb2.WellnessResults.FromString,
+                response_deserializer=gRPC_dot_PROTO_dot_terminal__pb2.WellnessResults.FromString,
                 )
 
 
-class ProxyServicerServicer(object):
+class TerminalServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetPollution(self, request, context):
@@ -54,31 +54,31 @@ class ProxyServicerServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_ProxyServicerServicer_to_server(servicer, server):
+def add_TerminalServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetPollution': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPollution,
-                    request_deserializer=gRPC_dot_PROTO_dot_proxy__pb2.PollutionAnalysisResponse.FromString,
+                    request_deserializer=gRPC_dot_PROTO_dot_terminal__pb2.PollutionAnalysisResponse.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'GetMeteo': grpc.unary_unary_rpc_method_handler(
                     servicer.GetMeteo,
-                    request_deserializer=gRPC_dot_PROTO_dot_proxy__pb2.AirAnalysisResponse.FromString,
+                    request_deserializer=gRPC_dot_PROTO_dot_terminal__pb2.AirAnalysisResponse.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SendWellnessResults': grpc.unary_unary_rpc_method_handler(
                     servicer.SendWellnessResults,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=gRPC_dot_PROTO_dot_proxy__pb2.WellnessResults.SerializeToString,
+                    response_serializer=gRPC_dot_PROTO_dot_terminal__pb2.WellnessResults.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'ProxyServicer', rpc_method_handlers)
+            'TerminalService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class ProxyServicer(object):
+class TerminalService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -92,8 +92,8 @@ class ProxyServicer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ProxyServicer/GetPollution',
-            gRPC_dot_PROTO_dot_proxy__pb2.PollutionAnalysisResponse.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/TerminalService/GetPollution',
+            gRPC_dot_PROTO_dot_terminal__pb2.PollutionAnalysisResponse.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -109,8 +109,8 @@ class ProxyServicer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ProxyServicer/GetMeteo',
-            gRPC_dot_PROTO_dot_proxy__pb2.AirAnalysisResponse.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/TerminalService/GetMeteo',
+            gRPC_dot_PROTO_dot_terminal__pb2.AirAnalysisResponse.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -126,8 +126,8 @@ class ProxyServicer(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ProxyServicer/SendWellnessResults',
+        return grpc.experimental.unary_unary(request, target, '/TerminalService/SendWellnessResults',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            gRPC_dot_PROTO_dot_proxy__pb2.WellnessResults.FromString,
+            gRPC_dot_PROTO_dot_terminal__pb2.WellnessResults.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

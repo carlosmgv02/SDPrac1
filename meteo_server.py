@@ -6,7 +6,6 @@ import meteo_utils
 from dataInstance import MeteoData
 from dataInstance import PollutionData
 from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
-from gRPC.PROTO import proxy_pb2_grpc, proxy_pb2
 
 from loadBalancer import RRLB
 import json
@@ -33,15 +32,23 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         meteo_data = MeteoData(request.temperature, request.humidity, request.time)
         serialized_meteo_data = meteo_data.__dict__
         wellness = self.meteo_data_processor.process_meteo_data(request)
-        print(self.redisClient.set(str(request.time), wellness))
+        print(self.redisClient.set(f'm{str(request.time)}', str(wellness).encode('utf-8')))
 
         response = meteo_utils_pb2.Co2Wellness(wellness=wellness)
 
-        channel_proxy = grpc.insecure_channel('localhost:5004')
-        # RRLB.set_server(channel)
-        server_processor = proxy_pb2_grpc.ProxyServicerStub(channel_proxy)
-        print('this is the response sending to the proxy')
-        res = server_processor.GetMeteo(request)
+        return response
+
+    def ProcessPollutionData(self, request, context):
+        # Here you can write your implementation to process meteo data from the request
+        # For example, let's say you want to calculate the air wellness index based on the given parameters
+        print("Pollution request: " + str(request))
+        meteo_data = PollutionData(request.co2, request.time)
+        serialized_meteo_data = meteo_data.__dict__
+        wellness = self.meteo_data_processor.process_pollution_data(request)
+        print(self.redisClient.set(f'p{str(request.time)}', str(wellness).encode('utf-8')))
+
+        response = meteo_utils_pb2.Co2Wellness(wellness=wellness)
+
 
         return response
 

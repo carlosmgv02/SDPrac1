@@ -2,18 +2,18 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 
 // to compile
-//python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./gRPC/PROTO/proxy.proto
+//python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./gRPC/PROTO/terminal.proto
 
 
 
 message AirAnalysisResponse {
-    float temperature = 1;
-    float humidity = 2;
-    float time = 3;
+  float temperature = 1;
+  float humidity = 2;
+  float time = 3;
 }
 message PollutionAnalysisResponse {
-    float co2 = 1;
-    float time = 2;
+  float co2 = 1;
+  float time = 2;
 }
 
 message WellnessResults {
@@ -29,8 +29,8 @@ message WellnessResults {
 
 
 
+service TerminalService {
 
-service ProxyServicer {
 
   rpc GetPollution(PollutionAnalysisResponse)  returns (google.protobuf.Empty) {}
   rpc GetMeteo(AirAnalysisResponse)  returns (google.protobuf.Empty) {}
@@ -38,4 +38,3 @@ service ProxyServicer {
   rpc SendWellnessResults(google.protobuf.Empty) returns (WellnessResults) {}
 
 }
-

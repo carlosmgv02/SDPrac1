@@ -9,14 +9,6 @@ University. Consists of the implementation of a distributed system using `Python
     * [Running steps](#run)
       * [Linux](#linux)
       * [Windows](#windows)
-* [Task](#task)
-    * [Description](#description)
-    * [ActorProxy](#actorproxy)
-    * [ActorDecorator](#actordecorator)
-    * [Reflection and Dynamic Proxy](#reflection-and-dynamic-proxy)
-    * [MonitorService and Observer pattern](#monitorservice-and-observer-pattern)
-    * [Validation](#validation)
-    * [Optional](#optional-parts)
 * [Authors](#authors)
 
 ## Introduction
