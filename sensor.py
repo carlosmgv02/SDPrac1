@@ -25,7 +25,8 @@ channel = grpc.insecure_channel('localhost:5000')
 connection = pika.BlockingConnection(pika.ConnectionParameters('162.246.254.134'))
 channel = connection.channel()
 
-print('Sensor - running on 50050')
+print('SENSOR')
+
 while True:
     messages = [analyzeAir(), analyzePollution()]
     for message in messages:
@@ -37,4 +38,4 @@ while True:
                 delivery_mode=2)  # make message persistent
         )
         print(" [x] Sent %r" % message)
-    time.sleep(2)
+    time.sleep(1)

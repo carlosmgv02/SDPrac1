@@ -10,9 +10,7 @@ import redis
 import meteo_utils
 from dataInstance import MeteoData
 from dataInstance import PollutionData
-from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
 
-from loadBalancer import RRLB
 import json
 
 
@@ -33,12 +31,15 @@ class MeteoDataServiceServicer():
 
     def saveData(self, data):
         data = json.loads(data)
+        timestamp = data['timestamp']
         if 'co2' in data:
             res = self.process_pollution(data)
+            return self.redisClient.set(f'p{str(timestamp)}', str(res).encode('utf-8'))
         else:
             res = self.process_meteo(data)
-        timestamp = data['timestamp']
-        return self.redisClient.set(f'm{str(timestamp)}', str(res).encode('utf-8'))
+            return self.redisClient.set(f'm{str(timestamp)}', str(res).encode('utf-8'))
+
+
 
     def processData(self):
         def callback(ch, method, properties, body):
@@ -56,8 +57,8 @@ class MeteoDataServiceServicer():
         self.channel.start_consuming()
 
 
-print('METEO_SERVER - Listening on port. polls')
 if __name__ == '__main__':
+    print('METEO_SERVER')
     try:
         while True:
             server = MeteoDataServiceServicer()

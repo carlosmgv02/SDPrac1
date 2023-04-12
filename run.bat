@@ -18,9 +18,12 @@ if errorlevel 1 (
     echo    Usuario: guest
     echo    Password: guest
     start http://162.246.254.134:15672/
-    start cmd /k "python LBServicer.py"
+    start cmd /k "python sensor.py"
     timeout /t 2
     start cmd /k "python meteo_server.py"
-    timeout /t 2
-    start cmd /k "python sensor.py"
+    timeout /t 3
+    start cmd /k "python proxy.py"
+    timeout /t 1
+    start cmd /k "python terminal.py"
+    start cmd /k "python terminal.py"
 )

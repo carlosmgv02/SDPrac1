@@ -1,12 +1,18 @@
+import datetime
+
+
 class MeteoData:
     def __init__(self, temperature, humidity, timestamp):
         self.temperature = temperature
         self.humidity = humidity
         self.timestamp = timestamp
 
-    def __str__(self):
-        return "Temperature: " + str(self.temperature) + " Humidity: " + str(self.humidity) + " Timestamp: " + str(
-            self.timestamp)
+    def to_dict(self):
+        return {
+            "temperature": self.temperature,
+            "humidity": self.humidity,
+            "timestamp": self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        }
 
 
 class PollutionData:
@@ -14,15 +20,20 @@ class PollutionData:
         self.co2 = co2
         self.timestamp = timestamp
 
-    def __str__(self):
-        return "CO2: " + str(self.co2) + " Timestamp: " + str(self.timestamp)
+    def to_dict(self):
+        return {
+            "co2": self.co2,
+            "timestamp": self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        }
 
 
 class DataCalculus:
-    def __init__(self, time, average, stdev):
+    def __init__(self, time, average):
         self.time = time
         self.average = average
-        self.stdev = stdev
 
-    def __str__(self):
-        return "Time: " + str(self.time) + " Average: " + str(self.average) + " Stdev: " + str(self.stdev)
+    def to_dict(self):
+        return {
+            "time": self.time.strftime("%Y-%m-%d %H:%M:%S"),
+            "average": self.average
+        }

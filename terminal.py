@@ -1,30 +1,49 @@
 import pika
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from jsonpickle import json
+from datetime import datetime
 
 
 class Terminal():
-        def __init__(self):
-            self.channel = pika.BlockingConnection(pika.ConnectionParameters('162.246.254.134')).channel()
-            self.channel.exchange_declare(exchange='logs',
-                                          exchange_type='fanout')
-            self.channel.queue_bind(exchange='logs', queue='proxy-terminal')
+    def __init__(self):
+        self.channel = pika.BlockingConnection(pika.ConnectionParameters('162.246.254.134')).channel()
+        self.channel.exchange_declare(exchange='logs', exchange_type='fanout')
+        result = self.channel.queue_declare(queue='', exclusive=True)
+        self.queue_name = result.method.queue
+        self.channel.queue_bind(exchange='logs', queue=self.queue_name)
 
-        def printValues(self, time, data):
-            # Crear una figura y un eje
-            fig, ax = plt.subplots()
+        # Crear una figura y un eje
+        self.fig, self.ax = plt.subplots()
 
-            # Crear la gráfica con los valores de tiempo y wellness
-            ax.plot(time, data)
+        # Agregar etiquetas y título a la gráfica
+        self.ax.set_xlabel('Tiempo')
+        self.ax.set_ylabel('Media')
+        self.ax.set_title('Gráfica de Wellness en el Tiempo')
 
-            # Agregar etiquetas y título a la gráfica
-            ax.set_xlabel('Tiempo')
-            ax.set_ylabel('Wellness')
-            ax.set_title('Gráfica de Wellness en el Tiempo')
+        # Configurar el formato de la etiqueta del eje X
+        self.ax.xaxis.set_major_formatter(mdates.DateFormatter(' %H:%M:%S'))
 
-            # Mostrar la gráfica
-            plt.show()
-        def run(self):
-            def callback(ch, method, properties, body):
-                print(" [x] Received %r" % body)
-                self.printValues([body['timestamp']], [body['wellness']])
-            while True:
+    def printValues(self, time, data):
+        # Convertir el objeto datetime a un objeto matplotlib.dates
+        time = mdates.date2num(time)
+        # Actualizar la gráfica con los nuevos valores de tiempo y data
+        self.ax.plot_date(time, data, linestyle='-', color='b')
+        plt.draw()
+        plt.pause(0.001)
+
+    def run(self):
+        def callback(ch, method, properties, body):
+            print(" [x] Received %r" % body)
+            data = json.loads(body)
+            time = datetime.strptime(data['time'], '%Y-%m-%d %H:%M:%S')
+            self.printValues(time, [data['average']])
+
+        self.channel.basic_consume(queue=self.queue_name, on_message_callback=callback, auto_ack=True)
+        self.channel.start_consuming()
+
+
+if __name__ == '__main__':
+    print('TERMINAL')
+    terminal = Terminal()
+    terminal.run()
