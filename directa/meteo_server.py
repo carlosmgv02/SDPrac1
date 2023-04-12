@@ -1,6 +1,8 @@
 import grpc
 from concurrent import futures
 import time
+
+import pika
 import redis
 import meteo_utils
 from dataInstance import MeteoData
@@ -16,6 +18,9 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
     def __init__(self):
         self.meteo_data_processor = meteo_utils.MeteoDataProcessor()
         self.redisClient = redis.Redis('162.246.254.134', port=8001)
+        self.channel = self.connection.channel(
+            pika.BlockingConnection(pika.ConnectionParameters('162.246.254.134'))
+        )
 
     def get_all_meteo_data(self):
         all_data = {}
@@ -25,7 +30,18 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
             all_data[key] = meteo_data
         return all_data
 
+    def saveData(self, data):
+        timestamp = data['time']
+        wellness = self.meteo_data_processor.process_meteo_data(data)
+        return self.redisClient.set(f'm{str(timestamp)}', str(wellness).encode('utf-8'))
+
     def ProcessMeteoData(self, request, context):
+        def callback(ch, method, properties, body):
+            print(" [x] Received %r" % body)
+            self.saveData(str(body))
+        self.channel.basic_consume(
+            queue='client-server',
+            on_message_callback=callback)
         # Here you can write your implementation to process meteo data from the request
         # For example, let's say you want to calculate the air wellness index based on the given parameters
         print("the req" + str(request))
@@ -48,7 +64,6 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         print(self.redisClient.set(f'p{str(request.time)}', str(wellness).encode('utf-8')))
 
         response = meteo_utils_pb2.Co2Wellness(wellness=wellness)
-
 
         return response
 
