@@ -2,6 +2,8 @@ import datetime
 
 import grpc
 import pika
+from jsonpickle import json
+
 import meteo_utils
 import time
 
@@ -32,7 +34,7 @@ while True:
         channel.basic_publish(
             exchange='',
             routing_key='client-server',
-            body=str(message),
+            body=json.dumps(message),
             properties=pika.BasicProperties(
                 delivery_mode=2)  # make message persistent
         )
