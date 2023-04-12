@@ -22,5 +22,9 @@ if errorlevel 1 (
     timeout /t 2
     start cmd /k "python meteo_server.py"
     timeout /t 2
+    start cmd /k "python terminalServicer.py"
+    timeout /t 2
     start cmd /k "python sensor.py"
+    timeout /t 1
+    start cmd /k "python proxy.py"
 )

@@ -1,6 +1,8 @@
 import datetime
+import time
 
 import grpc
+
 from gRPC.PROTO import load_balancer_pb2
 from gRPC.PROTO import load_balancer_pb2_grpc
 import sys
@@ -15,18 +17,24 @@ stub = load_balancer_pb2_grpc.LoadBalancerServicerStub(channel)
 
 # create a valid request message
 empty = load_balancer_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
-meteoReq = stub.AnalyzeAir(empty)
-meteoReq.time = float(datetime.datetime.now().timestamp())
-stub.ReceiveMeteo(meteoReq)
+while True:
+    meteoReq = stub.AnalyzeAir(empty)
+    meteoReq.time = float(datetime.datetime.now().timestamp())
+    stub.ReceiveMeteo(meteoReq)
+    time.sleep(2)
+
 print('meteoReq: ')
 print(meteoReq)
 
 # create a valid request message
 # pollution_data = meteo_utils_pb2.PollutionData(co2=1000)
 empty = load_balancer_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
-pollutionReq = stub.AnalyzePollution(empty)
-pollutionReq.time = float(datetime.datetime.now().timestamp())
-stub.ReceivePollution(pollutionReq)
+
+while True:
+    pollutionReq = stub.AnalyzePollution(empty)
+    pollutionReq.time = float(datetime.datetime.now().timestamp())
+    stub.ReceivePollution(pollutionReq)
+    time.sleep(2)
 # print the response
 print('pollutionReq: ')
 print(pollutionReq)

@@ -1,6 +1,11 @@
+import grpc
 import redis
 import time
 from statistics import mean, stdev
+
+import wellnessResults
+from gRPC.PROTO import terminal_pb2_grpc
+from wellnessResults import WellnessResults
 
 
 class Proxy:
@@ -13,38 +18,36 @@ class Proxy:
         for item in string:
             ls.append(float(item.decode()[1:]))
         return ls
-    def delete_until_first_number(self, string):
-        index = 0
-        for i, char in enumerate(string):
-            if char.isdigit():
-                index = i
-                break
-        return string[index:]
 
     def run(self):
 
-        window_time = 10
+        window_time = 20
         window_length = 10
-
 
         while True:
             k = self.redis_con.keys()
             keys = self.strip(k)
-            avg = mean(keys)
-            std = stdev(keys)
-            print(f'avg: {avg}, stdev: {std}')
-            # Call the retrieve_and_remove_data method every 5 seconds
-            print(self.retrieve_and_remove_data(keys))
-            time.sleep(window_time)
+            if len(keys) > 1:
+                avg = mean(keys)
+                std = stdev(keys)
+                # Diferenciar per tipus
+                wellness_results = WellnessResults(avg, std)
+                print(f'WR: {wellness_results}')
+                # Call the retrieve_and_remove_data method every 5 seconds
+                print(self.retrieve_and_remove_data(keys))
+                # Send 2 the terminal
+                channel_stub = grpc.insecure_channel('localhost:5006')
+                # RRLB.set_server(channel)
+                server_terminal = terminal_pb2_grpc.TerminalServiceStub(channel_stub)
+                print('this is the response')
+                server_terminal.SendWellnessResults(server_terminal)
+                time.sleep(window_time)
 
     def retrieve_and_remove_data(self, keys):
         if keys is not None:
             for key in keys:
                 return self.redis_con.flushdb()
                 # Do something with the retrieved data
-
-    def SendWellnessResults(self, request, context):
-        return
 
 
 if __name__ == '__main__':
