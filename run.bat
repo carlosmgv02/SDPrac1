@@ -8,7 +8,6 @@ if exist requirements.txt (
     exit /b 1
 )
 
-echo Haciendo ping al servidor para comprobar que estan disponibles los servicios de Redi y RabbitMQ
 ping -n 1 162.246.254.134 > nul
 if errorlevel 1 (
     echo El servidor no se encuentra disponible

@@ -1,44 +1,64 @@
 from concurrent import futures
 import grpc
 import time
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import pickle
 
 import redis
 
-from LBServicer import serve
 from gRPC.PROTO import terminal_pb2, terminal_pb2_grpc
-from loadBalancer import RRLB
-from meteo_utils import MeteoDataDetector
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
 
 class TerminalServiceServicer(terminal_pb2_grpc.TerminalServiceServicer):
+    def __init__(self):
+        self.requests = []
+
     def SendWellnessResults(self, request, context):
-        # Here you can write your implementation to send the wellness results
-        # For example, let's say you want to return some dummy data
-        print('recieved from termial servier' + str(request))
+        print('received from terminal server' + str(request.time) + str(request.avg) + str(request.desv))
+
+        # Store the request in a list
+        self.requests.append(request)
+        print('appended', self.requests)
+        #Aixo no hauria de estar aki
+        self.plot_avg_results()
+        self.plot_desv_results()
+
         response = terminal_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
-
-        # Crear una figura y un eje
-        fig, ax = plt.subplots()
-
-        # Agregar etiquetas y título a la gráfica
-        ax.set_xlabel('Tiempo')
-        ax.set_ylabel('Media')
-        ax.set_title('Gráfica de Wellness en el Tiempo')
-
-        # Configurar el formato de la etiqueta del eje X
-        ax.xaxis.set_major_formatter(mdates.DateFormatter(' %H:%M:%S'))
-
         return response
 
-    def printValues(self, time, data):
-        # Convertir el objeto datetime a un objeto matplotlib.dates
-        time = mdates.date2num(time)
-        # Actualizar la gráfica con los nuevos valores de tiempo y data
-        self.ax.plot_date(time, data, linestyle='-', color='b')
-        plt.draw()
-        plt.pause(0.001)
+    def plot_avg_results(self):
+        times = [req.time for req in self.requests]
+        avgs = [req.avg for req in self.requests]
+        print('avgs: ' + str(avgs))
+        print( 'times: ' + str(times))
+
+        # Plot the diagram
+        fig, ax = plt.subplots()
+        ax.plot(times, avgs, label='avg')
+        ax.legend()
+        ax.set(xlabel='time', ylabel='value')
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+        fig.autofmt_xdate()
+        print('showing avg')
+        plt.show()
+        plt.close()
+
+    def plot_desv_results(self):
+        times = [req.time for req in self.requests]
+        desvs = [req.desv for req in self.requests]
+
+        # Plot the diagram
+        fig, ax = plt.subplots()
+        ax.plot(times, desvs, label='desv')
+        ax.legend()
+        ax.set(xlabel='time', ylabel='value')
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+        fig.autofmt_xdate()
+        print('showing avstg')
+
+        plt.show()
+        plt.close()
 
 
 def serve():
@@ -55,7 +75,12 @@ def serve():
     try:
         while True:
             print('Server running on port 5006')
-            time.sleep(86400)
+            # Call the plot_avg_results() method every win_time seconds to update the average plot
+            print('calling results')
+            TerminalServiceServicer().plot_avg_results()
+            # Call the plot_desv_results() method every win_time seconds to update the standard deviation plot
+            TerminalServiceServicer().plot_desv_results()
+            time.sleep(win_time)
     except KeyboardInterrupt:
         server.stop(0)
 

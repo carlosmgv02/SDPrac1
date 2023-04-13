@@ -36,6 +36,7 @@ class Proxy:
         while True:
             k = self.redis_con.keys()
             try:
+                print('entra')
                 min_time = min(strip(k))
                 date_time = datetime.datetime.fromtimestamp(min_time)
                 keys = strip(k)
@@ -56,6 +57,7 @@ class Proxy:
                 server_terminal.SendWellnessResults(wellness_results)
                 time.sleep(window_time)
             except Exception as e:
+                print(e)
                 time.sleep(window_time)
 
     def retrieve_and_remove_data(self, keys):
