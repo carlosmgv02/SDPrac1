@@ -17,7 +17,6 @@ if errorlevel 1 (
     echo Abriendo RabbitMQ Management en el navegador...
     echo    Usuario: guest
     echo    Password: guest
-    start http://162.246.254.134:15672/
     start cmd /k "python sensor.py"
     timeout /t 2
     start cmd /k "python meteo_server.py"
