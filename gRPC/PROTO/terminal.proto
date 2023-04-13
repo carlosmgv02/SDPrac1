@@ -6,9 +6,9 @@ import "google/protobuf/empty.proto";
 
 
 message WellnessResults {
-  float avg = 1;
-  float desv = 2;
-
+  float time = 1;
+  float avg = 2;
+  float desv = 3;
 }
 
 

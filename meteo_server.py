@@ -1,3 +1,5 @@
+import sys
+
 import grpc
 from concurrent import futures
 import time
@@ -62,7 +64,9 @@ meteo_utils_pb2_grpc.add_MeteoDataServiceServicer_to_server(MeteoDataServiceServ
 # port = RRLB.get_server()
 
 print('METEO_SERVER - Listening on port.')
-server.add_insecure_port('0.0.0.0:5002')
+port = sys.argv[1]
+print('0.0.0.0'+port)
+server.add_insecure_port('0.0.0.0:'+port)
 
 server.start()
 # print(load_balancer.get_next_address())

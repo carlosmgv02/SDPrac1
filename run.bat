@@ -20,7 +20,9 @@ if errorlevel 1 (
     start http://162.246.254.134:15672/
     start cmd /k "python LBServicer.py"
     timeout /t 2
-    start cmd /k "python meteo_server.py"
+    start cmd /k "python meteo_server.py 5002"
+    start cmd /k "python meteo_server.py 5003"
+    start cmd /k "python meteo_server.py 5004"
     timeout /t 2
     start cmd /k "python terminalServicer.py"
     timeout /t 2

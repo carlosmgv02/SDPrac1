@@ -1,3 +1,5 @@
+import datetime
+
 import grpc
 import redis
 import time
@@ -5,7 +7,14 @@ from statistics import mean, stdev
 
 import wellnessResults
 from gRPC.PROTO import terminal_pb2_grpc
-from wellnessResults import WellnessResults
+from gRPC.PROTO.terminal_pb2 import WellnessResults
+
+
+def strip(string):
+    ls = []
+    for item in string:
+        ls.append(float(item.decode()[1:]))
+    return ls
 
 
 class Proxy:
@@ -13,11 +22,11 @@ class Proxy:
         self.redis_pool = redis.ConnectionPool('162.246.254.134', port=8001, db=0)
         self.redis_con = redis.Redis('162.246.254.134', port=8001, db=0)
 
-    def strip(self, string):
-        ls = []
-        for item in string:
-            ls.append(float(item.decode()[1:]))
-        return ls
+    def getValues(self, keys):
+        values = []
+        for key in keys:
+            values.append(self.redis_con.get(key))
+        return values
 
     def run(self):
 
@@ -26,21 +35,27 @@ class Proxy:
 
         while True:
             k = self.redis_con.keys()
-            keys = self.strip(k)
-            if len(keys) > 1:
-                avg = mean(keys)
-                std = stdev(keys)
+            try:
+                min_time = min(strip(k))
+                date_time = datetime.datetime.fromtimestamp(min_time)
+                keys = strip(k)
+                values = strip(self.getValues(k))
+                avg = mean(values)
+                std = stdev(values)
                 # Diferenciar per tipus
-                wellness_results = WellnessResults(avg, std)
-                print(f'WR: {wellness_results}')
+                wellness_results = WellnessResults(time=min_time, avg=avg, desv=std)
+
                 # Call the retrieve_and_remove_data method every 5 seconds
-                print(self.retrieve_and_remove_data(keys))
+                self.retrieve_and_remove_data(keys)
                 # Send 2 the terminal
                 channel_stub = grpc.insecure_channel('localhost:5006')
                 # RRLB.set_server(channel)
                 server_terminal = terminal_pb2_grpc.TerminalServiceStub(channel_stub)
-                print('this is the response')
-                server_terminal.SendWellnessResults(server_terminal)
+                temps = date_time.strptime(str(date_time), '%Y-%m-%d %H:%M:%S')
+                print(f'Sent from proxy to terminal, time: {temps}, avg: {avg}, std: {std}.')
+                server_terminal.SendWellnessResults(wellness_results)
+                time.sleep(window_time)
+            except Exception as e:
                 time.sleep(window_time)
 
     def retrieve_and_remove_data(self, keys):
@@ -51,5 +66,6 @@ class Proxy:
 
 
 if __name__ == '__main__':
+    print('PROXY')
     proxy = Proxy()
     proxy.run()
