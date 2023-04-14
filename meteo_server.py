@@ -39,8 +39,6 @@ class MeteoDataServiceServicer():
             res = self.process_meteo(data)
             return self.redisClient.set(f'm{str(timestamp)}', str(res).encode('utf-8'))
 
-
-
     def processData(self):
         def callback(ch, method, properties, body):
             print(" [x] Received %r" % body.decode())

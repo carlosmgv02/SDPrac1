@@ -28,9 +28,11 @@ class PollutionData:
 
 
 class DataCalculus:
-    def __init__(self, time, average):
+    def __init__(self, time, avg, stdev, type):
         self.time = time
-        self.average = average
+        self.average = avg
+        self.stdev = stdev
+        self.type = type
 
     def to_dict(self):
         return {

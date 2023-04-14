@@ -1,34 +1,27 @@
 import datetime
-
-import grpc
-import pika
-from jsonpickle import json
-
-import meteo_utils
 import time
 
-def analyzeAir():
-    detector = meteo_utils.MeteoDataDetector()
-    meteo_data = detector.analyze_air()
-    meteo_data['timestamp'] = float(datetime.datetime.now().timestamp())
-    return meteo_data
+from jsonpickle import json
+import pika
+from numpy import double
+
+import meteo_utils
 
 
 def analyzePollution():
     detector = meteo_utils.MeteoDataDetector()
     meteo_data = detector.analyze_pollution()
-    meteo_data['timestamp'] = float(datetime.datetime.now().timestamp())
+    meteo_data['timestamp'] = double(datetime.datetime.timestamp(datetime.datetime.now()))
     return meteo_data
 
 
-channel = grpc.insecure_channel('localhost:5000')
 connection = pika.BlockingConnection(pika.ConnectionParameters('162.246.254.134'))
 channel = connection.channel()
 
-print('SENSOR')
+print('METEO_SENSOR')
 
 while True:
-    messages = [analyzeAir(), analyzePollution()]
+    messages = [analyzePollution()]
     for message in messages:
         channel.basic_publish(
             exchange='',

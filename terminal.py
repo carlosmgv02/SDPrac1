@@ -2,7 +2,7 @@ import pika
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from jsonpickle import json
-from datetime import datetime
+import datetime
 
 from numpy import double
 
@@ -40,7 +40,7 @@ class Terminal():
             print(" [x] Received %r" % body)
             data = json.loads(body)
             time = datetime.strptime(data['time'], '%Y-%m-%d %H:%M:%S')
-            self.printValues(time, [data['average']]) # falta enviar avg y desv
+            self.printValues(time, [data['avg']], [data['stdev']]) # falta enviar avg y desv
 
         self.channel.basic_consume(queue=self.queue_name, on_message_callback=callback, auto_ack=True)
         self.channel.start_consuming()
