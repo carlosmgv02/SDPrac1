@@ -3,6 +3,9 @@ import grpc
 import redis
 import time
 from statistics import mean, stdev
+
+from numpy import double
+
 from gRPC.PROTO import terminal_pb2_grpc
 from gRPC.PROTO.terminal_pb2 import WellnessResults
 
@@ -10,7 +13,7 @@ from gRPC.PROTO.terminal_pb2 import WellnessResults
 def strip(string):
     ls = []
     for item in string:
-        ls.append(float(item.decode()[1:]))
+        ls.append(double(item.decode()[1:]))
     return ls
 
 class Proxy:

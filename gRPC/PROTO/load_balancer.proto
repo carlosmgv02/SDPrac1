@@ -8,12 +8,12 @@ import "google/protobuf/empty.proto";
 message AirAnalysisResponse {
     float temperature = 1;
     float humidity = 2;
-    float time = 3;
+    double time = 3;
 }
 
 message PollutionAnalysisResponse {
     float co2 = 1;
-    float time = 2;
+    double time = 2;
 }
 
 message AirWellness {

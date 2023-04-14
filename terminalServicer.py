@@ -8,6 +8,7 @@ import matplotlib.dates as mdates
 import pickle
 
 import redis
+from numpy import double
 
 from gRPC.PROTO import terminal_pb2, terminal_pb2_grpc
 
@@ -17,7 +18,8 @@ class TerminalServiceServicer(terminal_pb2_grpc.TerminalServiceServicer):
         self.times = []
         self.avgs = []
         self.desvs = []
-        self.start_time = float(datetime.datetime.now().timestamp())
+        self.start_time = double(datetime.datetime.now().timestamp())
+
     def SendWellnessResults(self, request, context):
         print(f'received from terminal server {request.time}, {request.avg}, {request.desv}')
 

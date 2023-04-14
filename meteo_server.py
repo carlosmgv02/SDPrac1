@@ -4,6 +4,8 @@ import grpc
 from concurrent import futures
 import time
 import redis
+from numpy import double
+
 import meteo_utils
 from dataInstance import MeteoData
 from dataInstance import PollutionData
@@ -23,7 +25,7 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         all_data = {}
         for key in self.redisClient.keys():
             data = self.redisClient.hgetall(key)
-            meteo_data = MeteoData(float(data[b'temperature']), float(data[b'humidity']), float(data[b'timestamp']))
+            meteo_data = MeteoData(float(data[b'temperature']), float(data[b'humidity']), double(data[b'timestamp']))
             all_data[key] = meteo_data
         return all_data
 

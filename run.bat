@@ -17,15 +17,20 @@ if errorlevel 1 (
     echo    Usuario: guest
     echo    Password: guest
     start http://162.246.254.134:15672/
+    echo    Compiling .proto files...
+    python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./gRPC/PROTO/terminal.proto
+    python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./gRPC/PROTO/meteo_utils.proto
+    python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. --pyi_out=. ./gRPC/PROTO/load_balancer.proto
     start cmd /k "python LBServicer.py"
     timeout /t 2
     start cmd /k "python meteo_server.py 5002"
     start cmd /k "python meteo_server.py 5003"
     start cmd /k "python meteo_server.py 5004"
     timeout /t 2
-    rem start cmd /k "python terminalServicer.py"
+    start cmd /k "python terminalServicer.py"
     timeout /t 2
-    start cmd /k "python sensor.py"
+    start cmd /k "python pollution_sensor.py"
+    start cmd /k "python meteo_sensor.py"
     timeout /t 1
     start cmd /k "python proxy.py"
 )

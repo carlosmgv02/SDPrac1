@@ -18,11 +18,13 @@ class LoadBalancerServicer(load_balancer_pb2_grpc.LoadBalancerServicer):
         return server
 
     def ReceiveMeteo(self, request, context):
+        print(request.time)
         server_processor = self.round_robin_server()
         res = server_processor.ProcessMeteoData(request)
         return load_balancer_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
 
     def ReceivePollution(self, request, context):
+        print(request.time)
         server_processor = self.round_robin_server()
         res = server_processor.ProcessPollutionData(request)
         return load_balancer_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
