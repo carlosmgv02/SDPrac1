@@ -27,7 +27,7 @@ if errorlevel 1 (
     start cmd /k "python meteo_server.py 5003"
     start cmd /k "python meteo_server.py 5004"
     timeout /t 2
-    start cmd /k "python terminalServicer.py"
+    rem start cmd /k "python terminalServicer.py"
     timeout /t 2
     start cmd /k "python pollution_sensor.py"
     start cmd /k "python meteo_sensor.py"

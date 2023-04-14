@@ -14,23 +14,21 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cgRPC/PROTO/meteo_utils.proto\x12\x05meteo\x1a\x1bgoogle/protobuf/empty.proto\"H\n\x12\x41irConditionParams\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x0b\n\x03\x63o2\x18\x02 \x01(\x02\x12\x10\n\x08humidity\x18\x03 \x01(\x02\"J\n\x13\x41irAnalysisResponse\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x10\n\x08humidity\x18\x02 \x01(\x02\x12\x0c\n\x04time\x18\x03 \x01(\x01\"6\n\x19PollutionAnalysisResponse\x12\x0b\n\x03\x63o2\x18\x01 \x01(\x02\x12\x0c\n\x04time\x18\x02 \x01(\x01\"\x1f\n\x0b\x41irWellness\x12\x10\n\x08wellness\x18\x01 \x01(\x02\"\x1f\n\x0b\x43o2Wellness\x12\x10\n\x08wellness\x18\x01 \x01(\x02\x32\xa8\x01\n\x10MeteoDataService\x12\x44\n\x10ProcessMeteoData\x12\x1a.meteo.AirAnalysisResponse\x1a\x12.meteo.AirWellness\"\x00\x12N\n\x14ProcessPollutionData\x12 .meteo.PollutionAnalysisResponse\x1a\x12.meteo.Co2Wellness\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cgRPC/PROTO/meteo_utils.proto\x12\x05meteo\x1a\x1bgoogle/protobuf/empty.proto\"J\n\x13\x41irAnalysisResponse\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x10\n\x08humidity\x18\x02 \x01(\x02\x12\x0c\n\x04time\x18\x03 \x01(\x01\"6\n\x19PollutionAnalysisResponse\x12\x0b\n\x03\x63o2\x18\x01 \x01(\x02\x12\x0c\n\x04time\x18\x02 \x01(\x01\"\x1f\n\x0b\x41irWellness\x12\x10\n\x08wellness\x18\x01 \x01(\x02\"\x1f\n\x0b\x43o2Wellness\x12\x10\n\x08wellness\x18\x01 \x01(\x02\x32\xa8\x01\n\x10MeteoDataService\x12\x44\n\x10ProcessMeteoData\x12\x1a.meteo.AirAnalysisResponse\x1a\x12.meteo.AirWellness\"\x00\x12N\n\x14ProcessPollutionData\x12 .meteo.PollutionAnalysisResponse\x1a\x12.meteo.Co2Wellness\"\x00\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'gRPC.PROTO.meteo_utils_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _AIRCONDITIONPARAMS._serialized_start=68
-  _AIRCONDITIONPARAMS._serialized_end=140
-  _AIRANALYSISRESPONSE._serialized_start=142
-  _AIRANALYSISRESPONSE._serialized_end=216
-  _POLLUTIONANALYSISRESPONSE._serialized_start=218
-  _POLLUTIONANALYSISRESPONSE._serialized_end=272
-  _AIRWELLNESS._serialized_start=274
-  _AIRWELLNESS._serialized_end=305
-  _CO2WELLNESS._serialized_start=307
-  _CO2WELLNESS._serialized_end=338
-  _METEODATASERVICE._serialized_start=341
-  _METEODATASERVICE._serialized_end=509
+  _AIRANALYSISRESPONSE._serialized_start=68
+  _AIRANALYSISRESPONSE._serialized_end=142
+  _POLLUTIONANALYSISRESPONSE._serialized_start=144
+  _POLLUTIONANALYSISRESPONSE._serialized_end=198
+  _AIRWELLNESS._serialized_start=200
+  _AIRWELLNESS._serialized_end=231
+  _CO2WELLNESS._serialized_start=233
+  _CO2WELLNESS._serialized_end=264
+  _METEODATASERVICE._serialized_start=267
+  _METEODATASERVICE._serialized_end=435
 # @@protoc_insertion_point(module_scope)

@@ -15,16 +15,6 @@ class LoadBalancerServicerStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.AnalyzeAir = channel.unary_unary(
-                '/LoadBalancerServicer/AnalyzeAir',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.FromString,
-                )
-        self.AnalyzePollution = channel.unary_unary(
-                '/LoadBalancerServicer/AnalyzePollution',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.FromString,
-                )
         self.ReceiveMeteo = channel.unary_unary(
                 '/LoadBalancerServicer/ReceiveMeteo',
                 request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.SerializeToString,
@@ -35,47 +25,10 @@ class LoadBalancerServicerStub(object):
                 request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
-        self.GetChannel = channel.unary_unary(
-                '/LoadBalancerServicer/GetChannel',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
-                )
-        self.AddChannel = channel.unary_unary(
-                '/LoadBalancerServicer/AddChannel',
-                request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                )
-        self.DeleteChannel = channel.unary_unary(
-                '/LoadBalancerServicer/DeleteChannel',
-                request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                )
-        self.SendMeteoData = channel.unary_unary(
-                '/LoadBalancerServicer/SendMeteoData',
-                request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.SerializeToString,
-                response_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirWellness.FromString,
-                )
-        self.SendMeteoPollutionData = channel.unary_unary(
-                '/LoadBalancerServicer/SendMeteoPollutionData',
-                request_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.SerializeToString,
-                response_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Co2Wellness.FromString,
-                )
 
 
 class LoadBalancerServicerServicer(object):
     """Missing associated documentation comment in .proto file."""
-
-    def AnalyzeAir(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def AnalyzePollution(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
 
     def ReceiveMeteo(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -89,49 +42,9 @@ class LoadBalancerServicerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetChannel(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def AddChannel(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def DeleteChannel(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def SendMeteoData(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def SendMeteoPollutionData(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
 
 def add_LoadBalancerServicerServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'AnalyzeAir': grpc.unary_unary_rpc_method_handler(
-                    servicer.AnalyzeAir,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.SerializeToString,
-            ),
-            'AnalyzePollution': grpc.unary_unary_rpc_method_handler(
-                    servicer.AnalyzePollution,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.SerializeToString,
-            ),
             'ReceiveMeteo': grpc.unary_unary_rpc_method_handler(
                     servicer.ReceiveMeteo,
                     request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.FromString,
@@ -142,31 +55,6 @@ def add_LoadBalancerServicerServicer_to_server(servicer, server):
                     request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
-            'GetChannel': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetChannel,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
-            ),
-            'AddChannel': grpc.unary_unary_rpc_method_handler(
-                    servicer.AddChannel,
-                    request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
-            'DeleteChannel': grpc.unary_unary_rpc_method_handler(
-                    servicer.DeleteChannel,
-                    request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
-            'SendMeteoData': grpc.unary_unary_rpc_method_handler(
-                    servicer.SendMeteoData,
-                    request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.FromString,
-                    response_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.AirWellness.SerializeToString,
-            ),
-            'SendMeteoPollutionData': grpc.unary_unary_rpc_method_handler(
-                    servicer.SendMeteoPollutionData,
-                    request_deserializer=gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.FromString,
-                    response_serializer=gRPC_dot_PROTO_dot_load__balancer__pb2.Co2Wellness.SerializeToString,
-            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'LoadBalancerServicer', rpc_method_handlers)
@@ -176,40 +64,6 @@ def add_LoadBalancerServicerServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class LoadBalancerServicer(object):
     """Missing associated documentation comment in .proto file."""
-
-    @staticmethod
-    def AnalyzeAir(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/AnalyzeAir',
-            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def AnalyzePollution(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/AnalyzePollution',
-            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def ReceiveMeteo(request,
@@ -242,90 +96,5 @@ class LoadBalancerServicer(object):
         return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/ReceivePollution',
             gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetChannel(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/GetChannel',
-            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            gRPC_dot_PROTO_dot_load__balancer__pb2.Port.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def AddChannel(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/AddChannel',
-            gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def DeleteChannel(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/DeleteChannel',
-            gRPC_dot_PROTO_dot_load__balancer__pb2.Port.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def SendMeteoData(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/SendMeteoData',
-            gRPC_dot_PROTO_dot_load__balancer__pb2.AirAnalysisResponse.SerializeToString,
-            gRPC_dot_PROTO_dot_load__balancer__pb2.AirWellness.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def SendMeteoPollutionData(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/LoadBalancerServicer/SendMeteoPollutionData',
-            gRPC_dot_PROTO_dot_load__balancer__pb2.PollutionAnalysisResponse.SerializeToString,
-            gRPC_dot_PROTO_dot_load__balancer__pb2.Co2Wellness.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

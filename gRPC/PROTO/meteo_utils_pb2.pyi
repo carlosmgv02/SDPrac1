@@ -15,16 +15,6 @@ class AirAnalysisResponse(_message.Message):
     time: float
     def __init__(self, temperature: _Optional[float] = ..., humidity: _Optional[float] = ..., time: _Optional[float] = ...) -> None: ...
 
-class AirConditionParams(_message.Message):
-    __slots__ = ["co2", "humidity", "temperature"]
-    CO2_FIELD_NUMBER: _ClassVar[int]
-    HUMIDITY_FIELD_NUMBER: _ClassVar[int]
-    TEMPERATURE_FIELD_NUMBER: _ClassVar[int]
-    co2: float
-    humidity: float
-    temperature: float
-    def __init__(self, temperature: _Optional[float] = ..., co2: _Optional[float] = ..., humidity: _Optional[float] = ...) -> None: ...
-
 class AirWellness(_message.Message):
     __slots__ = ["wellness"]
     WELLNESS_FIELD_NUMBER: _ClassVar[int]

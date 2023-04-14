@@ -15,18 +15,6 @@ class AirAnalysisResponse(_message.Message):
     time: float
     def __init__(self, temperature: _Optional[float] = ..., humidity: _Optional[float] = ..., time: _Optional[float] = ...) -> None: ...
 
-class AirWellness(_message.Message):
-    __slots__ = ["wellness"]
-    WELLNESS_FIELD_NUMBER: _ClassVar[int]
-    wellness: float
-    def __init__(self, wellness: _Optional[float] = ...) -> None: ...
-
-class Co2Wellness(_message.Message):
-    __slots__ = ["wellness"]
-    WELLNESS_FIELD_NUMBER: _ClassVar[int]
-    wellness: float
-    def __init__(self, wellness: _Optional[float] = ...) -> None: ...
-
 class PollutionAnalysisResponse(_message.Message):
     __slots__ = ["co2", "time"]
     CO2_FIELD_NUMBER: _ClassVar[int]
@@ -34,9 +22,3 @@ class PollutionAnalysisResponse(_message.Message):
     co2: float
     time: float
     def __init__(self, co2: _Optional[float] = ..., time: _Optional[float] = ...) -> None: ...
-
-class Port(_message.Message):
-    __slots__ = ["port"]
-    PORT_FIELD_NUMBER: _ClassVar[int]
-    port: str
-    def __init__(self, port: _Optional[str] = ...) -> None: ...
