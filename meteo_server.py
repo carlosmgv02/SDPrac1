@@ -8,7 +8,7 @@ import meteo_utils
 from dataInstance import MeteoData
 from dataInstance import PollutionData
 from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
-
+import datetime
 from loadBalancer import RRLB
 import json
 
@@ -34,6 +34,8 @@ class MeteoDataServiceServicer(meteo_utils_pb2_grpc.MeteoDataServiceServicer):
         meteo_data = MeteoData(request.temperature, request.humidity, request.time)
         serialized_meteo_data = meteo_data.__dict__
         wellness = self.meteo_data_processor.process_meteo_data(request)
+        print('POLL_TIME: '+ datetime.datetime.fromtimestamp(request.time).strftime('%Y-%m-%d %H:%M:%S'))
+
         print(self.redisClient.set(f'm{str(request.time)}', str(wellness).encode('utf-8')))
 
         response = meteo_utils_pb2.Co2Wellness(wellness=wellness)
