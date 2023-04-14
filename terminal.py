@@ -4,6 +4,8 @@ import matplotlib.dates as mdates
 from jsonpickle import json
 from datetime import datetime
 
+from numpy import double
+
 
 class Terminal():
     def __init__(self):
@@ -12,24 +14,25 @@ class Terminal():
         result = self.channel.queue_declare(queue='', exclusive=True)
         self.queue_name = result.method.queue
         self.channel.queue_bind(exchange='logs', queue=self.queue_name)
+        self.avgs = []
+        self.desvs = []
+        self.times = []
+        self.start_time = double(datetime.datetime.now().timestamp())
 
-        # Crear una figura y un eje
-        self.fig, self.ax = plt.subplots()
+    def printValues(self, time, desv, avg):
+        self.times.append(time)
+        self.avgs.append(avg)
+        self.desvs.append(desv)
 
-        # Agregar etiquetas y título a la gráfica
-        self.ax.set_xlabel('Tiempo')
-        self.ax.set_ylabel('Media')
-        self.ax.set_title('Gráfica de Wellness en el Tiempo')
-
-        # Configurar el formato de la etiqueta del eje X
-        self.ax.xaxis.set_major_formatter(mdates.DateFormatter(' %H:%M:%S'))
-
-    def printValues(self, time, data):
-        # Convertir el objeto datetime a un objeto matplotlib.dates
-        time = mdates.date2num(time)
-        # Actualizar la gráfica con los nuevos valores de tiempo y data
-        self.ax.plot_date(time, data, linestyle='-', color='b')
-        plt.draw()
+        fig, ax = plt.subplots()
+        ax.plot(self.times, self.avgs, label='avg')
+        ax.plot(self.times, self.desvs, label='desv')
+        ax.legend()
+        ax.set(xlabel='time', ylabel='value')
+        xlabels = [times - self.start_time for times in self.times]
+        ax.set_xticklabels([f'{x:.2f}s' for x in xlabels])
+        print('showing diagram')
+        plt.show(block=False)
         plt.pause(0.001)
 
     def run(self):
@@ -37,7 +40,7 @@ class Terminal():
             print(" [x] Received %r" % body)
             data = json.loads(body)
             time = datetime.strptime(data['time'], '%Y-%m-%d %H:%M:%S')
-            self.printValues(time, [data['average']])
+            self.printValues(time, [data['average']]) # falta enviar avg y desv
 
         self.channel.basic_consume(queue=self.queue_name, on_message_callback=callback, auto_ack=True)
         self.channel.start_consuming()
