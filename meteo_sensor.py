@@ -3,21 +3,16 @@ import datetime
 import grpc
 import pika
 from jsonpickle import json
+from numpy import double
 
 import meteo_utils
 import time
 
+
 def analyzeAir():
     detector = meteo_utils.MeteoDataDetector()
     meteo_data = detector.analyze_air()
-    meteo_data['timestamp'] = float(datetime.datetime.now().timestamp())
-    return meteo_data
-
-
-def analyzePollution():
-    detector = meteo_utils.MeteoDataDetector()
-    meteo_data = detector.analyze_pollution()
-    meteo_data['timestamp'] = float(datetime.datetime.now().timestamp())
+    meteo_data['timestamp'] = double(datetime.datetime.now().timestamp())
     return meteo_data
 
 
@@ -28,7 +23,7 @@ channel = connection.channel()
 print('SENSOR')
 
 while True:
-    messages = [analyzeAir(), analyzePollution()]
+    messages = [analyzeAir()]
     for message in messages:
         channel.basic_publish(
             exchange='',

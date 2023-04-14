@@ -14,7 +14,7 @@ from dataInstance import PollutionData
 import json
 
 
-class MeteoDataServiceServicer():
+class MeteoDataServiceServicer:
 
     def __init__(self):
         self.meteo_data_processor = meteo_utils.MeteoDataProcessor()
