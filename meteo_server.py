@@ -11,7 +11,6 @@ from dataInstance import MeteoData
 from dataInstance import PollutionData
 from gRPC.PROTO import meteo_utils_pb2_grpc, meteo_utils_pb2
 import datetime
-from loadBalancer import RRLB
 import json
 
 

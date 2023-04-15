@@ -1,4 +1,5 @@
 import datetime
+import time
 
 import grpc
 from numpy import double
@@ -21,12 +22,13 @@ while True:
     meteo_res = meteo_data.analyze_pollution()
     pollutionReq = PollutionAnalysisResponse(co2=meteo_res["co2"])
     pollutionReq.time = 0
-    time = datetime.datetime.timestamp(datetime.datetime.now())
-    print('Calculated time: ', time)
-    pollutionReq.time = double(time)
+    currTime = datetime.datetime.timestamp(datetime.datetime.now())
+    print('Calculated time: ', currTime)
+    pollutionReq.time = double(currTime)
     print('POLL_TIME: '+ datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     stub.ReceivePollution(pollutionReq)
     # print the response
     print('pollutionReq: ', pollutionReq)
     print(pollutionReq)
+    time.sleep(1)
 

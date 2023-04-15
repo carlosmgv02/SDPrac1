@@ -24,12 +24,31 @@ Data in RabbitMQ is set to be kept even if there's a node failure to make sure t
 We've decided to make this implementation to have access to the same data and make a more realistic system.<br>
 When it comes to the RPC implementation, we first started using XMLRPC, but ended implementing GRPC due to its safety and speed.
 ### Direct
-
+* Sensors
+* Load balancer
+* Server
+* Redis storage
+* Proxy
+* Terminal
 ### Indirect
-
+* Sensors
+* RabbitMQ ( sensor - server communication )
+* Server
+* Redis storage
+* Proxy
+* RabbitMQ ( proxy - terminal communication )
+* Terminal
 ### Run
 
 #### Linux
+1. 
+```bash
+pip install -r requirements.txt
+```
+2.
+````bash
+./run.sh
+````
 #### Windows
 1. 
 ```bash
@@ -43,5 +62,3 @@ pip install -r requirements.txt
 ## Authors
 * Carlos Martínez - [carlosmgv02](https://github.com/carlosmgv02)
 * Nil Monfort - [nilm9](https://github.com/nilm9)
-* Genís Martínez - [genismartinez](https://github.com/genismartinez)
-

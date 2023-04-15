@@ -1,4 +1,5 @@
 import datetime
+import time
 
 import grpc
 from numpy import double
@@ -20,12 +21,12 @@ while True:
     meteoRes = meteo_data.analyze_air()
     meteoReq = AirAnalysisResponse(temperature=meteoRes["temperature"], humidity=meteoRes["humidity"])
     meteoReq.time = 0
-    time = datetime.datetime.timestamp(datetime.datetime.now())
-    print('Calculated time: ', time)
-    meteoReq.time = double(time)
+    currTime = datetime.datetime.timestamp(datetime.datetime.now())
+    print('Calculated time: ', currTime)
+    meteoReq.time = double(currTime)
     print('Request time: ', meteoReq.time)
     print('METEO_TIME: ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     print('Temperature: ', meteoReq.temperature, 'Humidity: ', meteoReq.humidity, 'Time: ', meteoReq.time)
     stub.ReceiveMeteo(meteoReq)
-
+    time.sleep(1)
 

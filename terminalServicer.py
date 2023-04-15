@@ -1,16 +1,12 @@
-from concurrent import futures
 import datetime
+import time
+from concurrent import futures
 
 import grpc
-import time
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import pickle
-
-import redis
 from numpy import double
 
-from gRPC.PROTO import terminal_pb2, terminal_pb2_grpc
+from gRPC.PROTO import terminal_pb2_grpc
 
 
 class TerminalServiceServicer(terminal_pb2_grpc.TerminalServiceServicer):
