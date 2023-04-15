@@ -17,8 +17,11 @@ if errorlevel 1 (
     echo Abriendo RabbitMQ Management en el navegador...
     echo    Usuario: guest
     echo    Password: guest
-    start cmd /k "python sensor.py"
+    start cmd /k "python pollution_sensor.py"
+    start cmd /k "python meteo_sensor.py"
     timeout /t 2
+    start cmd /k "python meteo_server.py"
+    start cmd /k "python meteo_server.py"
     start cmd /k "python meteo_server.py"
     timeout /t 3
     start cmd /k "python proxy.py"

@@ -17,3 +17,6 @@
 # #                       auto_ack=True,
 # #                       on_message_callback=callback)
 # connection.close()
+import redis
+redis_con = redis.Redis('162.246.254.134', port=8001, db=0)
+redis_con.flushdb()

@@ -28,14 +28,16 @@ class PollutionData:
 
 
 class DataCalculus:
-    def __init__(self, time, avg, stdev, type):
+    def __init__(self, time, avg, stdev, tipo):
         self.time = time
         self.average = avg
         self.stdev = stdev
-        self.type = type
+        self.tipo = tipo
 
-    def to_dict(self):
+    def __dict__(self):
         return {
-            "time": self.time.strftime("%Y-%m-%d %H:%M:%S"),
-            "average": self.average
+            "time": self.time,
+            "avg": float(self.average),
+            "stdev": float(self.stdev),
+            "type": self.tipo
         }

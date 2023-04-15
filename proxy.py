@@ -25,12 +25,11 @@ class Proxy:
         self.channel = pika.BlockingConnection(pika.ConnectionParameters('162.246.254.134')).channel()
         self.channel.queue_declare(queue='')
         self.channel.exchange_declare(exchange='logs', exchange_type='fanout')
-
+        self.last_timestamp = datetime.datetime.now()
     def getValues(self, keys):
         values = []
         for key in keys:
-            values.append(self.redis_con.get(key).decode())
-
+            values.append(float(self.redis_con.get(key).decode()))
         return values
 
     def getPollutionValues(self, keys):
@@ -47,41 +46,43 @@ class Proxy:
                 key_list.append(key)
         return self.getValues(key_list)
 
-    def getDataCalculus(self, type):
+    def getDataCalculus(self, tipo, min_time):
         keys = self.redis_con.keys()
-        if type == 'pollution':
-            values = self.getPollutionValues(keys)
-        else:
-            values = self.getMeteoValues(keys)
-        date_time = datetime.datetime.fromtimestamp(min(strip(self.redis_con.keys())))
+        # if tipo == 'pollution':
+        #    values = self.getPollutionValues(keys)
+        #else:
+        #    values = self.getMeteoValues(keys)
+        values = self.getValues(keys)
+        date_time = min(strip(self.redis_con.keys()))
         avg = mean(values)
         std = stdev(values)
-        print(f'{type.upper()} -> avg: {avg}, stdev: {std}')
-        return DataCalculus(date_time, avg, std, type=type)
+        print(f'{tipo.upper()} -> avg: {avg}, stdev: {std}')
+        return DataCalculus(min_time, avg, std, tipo=tipo)
 
     def run(self):
 
         window_time = 10
         window_length = 10
-
         while True:
-            k = self.redis_con.keys()
+            current_time = datetime.datetime.now()
+            time_diff = (current_time - self.last_timestamp).total_seconds()
             try:
-                min_time = min(strip(k))
-                date_time = datetime.datetime.fromtimestamp(min_time)
-                keys = strip(k)
-                meteo = self.getDataCalculus('meteo').to_dict()
-                pollution = self.getDataCalculus('pollution').to_dict()
-
-                self.channel.basic_publish(exchange='logs', routing_key='', body=meteo)
-                self.channel.basic_publish(exchange='logs', routing_key='', body=pollution)
-                print(" [x] Sent %r" % meteo)
-                print(" [x] Sent %r" % pollution)
-                # Call the retrieve_and_remove_data method every 5 seconds
-                print(self.retrieve_and_remove_data(keys))
+                if time_diff >= window_time:
+                    k = self.redis_con.keys()
+                    if k:
+                        min_time = min(strip(k))+window_time
+                        keys = strip(k)
+                        meteo = self.getDataCalculus('meteo', min_time).__dict__()
+                        # pollution = self.getDataCalculus('pollution', min_time).__dict__()
+                        self.channel.basic_publish(exchange='logs', routing_key='', body=json.dumps(meteo))
+                        # self.channel.basic_publish(exchange='logs', routing_key='', body=json.dumps(pollution))
+                        print(" [x] Sent %r" % meteo)
+                        # print(" [x] Sent %r" % pollution)
+                        # Call the retrieve_and_remove_data method every 5 seconds
+                        print(self.retrieve_and_remove_data(keys))
+                    self.last_timestamp = current_time
                 time.sleep(window_time)
             except ValueError:
-                print(ValueError)
                 time.sleep(window_time)
 
     def retrieve_and_remove_data(self, keys):

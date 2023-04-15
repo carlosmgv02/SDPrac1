@@ -19,7 +19,7 @@ class Terminal():
         self.times = []
         self.start_time = double(datetime.datetime.now().timestamp())
 
-    def printValues(self, time, desv, avg):
+    def printValues(self, time, avg, desv):
         self.times.append(time)
         self.avgs.append(avg)
         self.desvs.append(desv)
@@ -39,7 +39,7 @@ class Terminal():
         def callback(ch, method, properties, body):
             print(" [x] Received %r" % body)
             data = json.loads(body)
-            time = datetime.strptime(data['time'], '%Y-%m-%d %H:%M:%S')
+            time = data['time']
             self.printValues(time, [data['avg']], [data['stdev']]) # falta enviar avg y desv
 
         self.channel.basic_consume(queue=self.queue_name, on_message_callback=callback, auto_ack=True)
