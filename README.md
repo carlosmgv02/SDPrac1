@@ -39,6 +39,8 @@ When it comes to the RPC implementation, we first started using XMLRPC, but ende
 * RabbitMQ ( proxy - terminal communication )
 * Terminal
 ### Run
+When running the project, we recommend running the terminal file using PyCharm, as it has SciView installed and it's quite convenient to visualize plots.
+Every other file can be run using the terminal by running the `run.sh` or `run.bat` file, depending on the OS you're using.
 
 #### Linux
 1.
